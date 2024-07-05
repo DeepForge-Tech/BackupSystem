@@ -45,7 +45,7 @@ class Backup:
             command = f'pg_dump --dbname=postgresql://{values["DB_USER"]}:{values["DB_PASSWORD"]}@{values["DB_HOST"]}:{values["DB_PORT"]}/{values["DB_NAME"]} > "{backup_path}"'
             output = subprocess.run(command, shell=True)
             logging.info(f"Backup successfully finished. {output}")
-            
+
         if not os.path.exists(self.repo_dir):
             os.mkdir(self.backup_dir)
             clone_command = f"cd {self.backup_dir} && git clone  https://{self.token}@github.com/{self.username}/{self.name_repo}"
@@ -56,7 +56,7 @@ class Backup:
 if __name__ == "__main__":
     backup = Backup()
     # Schedule the backup to run every 1 hour
-    schedule.every(1).second.do(backup.run)
+    schedule.every(1).hour.do(backup.run)
     while True:
         schedule.run_pending()
         time.sleep(1)
