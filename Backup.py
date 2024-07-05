@@ -40,7 +40,8 @@ class Backup:
             os.mkdir(self.backup_dir)
             clone_command = f"cd {self.backup_dir} && git clone  https://{self.token}@github.com/{self.username}/{self.name_repo}"
             subprocess.run(clone_command, shell=True)
-        checkout_command = "git checkout -b master "
+        checkout_command = "git checkout -b master"
+        subprocess.run(checkout_command, shell=True)
         push_command = f"cd {self.repo_dir} && git commit -am \"Backup\" && git push -f origin master"
         subprocess.run(push_command, shell=True)
 
