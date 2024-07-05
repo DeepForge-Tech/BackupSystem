@@ -7,11 +7,12 @@ import json
 # from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO,format="%(asctime)s::%(levelname)s::%(message)s")
+delimeter = "===================================="
 
 class Backup:
     def __init__(self) -> None:
         self.current_dir = os.path.dirname(__file__)
-        with open(os.path.join(self.current_dir,'settings.json')) as file:
+        with open(os.path.join(self.current_dir,'backup_settings.json')) as file:
             content = file.read()
             self.settings = json.loads(content)
         
@@ -52,6 +53,7 @@ class Backup:
             command = f'pg_dump --dbname=postgresql://{values["DB_USER"]}:{values["DB_PASSWORD"]}@{values["DB_HOST"]}:{values["DB_PORT"]}/{values["DB_NAME"]} > "{backup_path}"'
             output = subprocess.run(command, shell=True)
             logging.info(f"Backup successfully finished. {output}")
+        print(delimeter)
 
 if __name__ == "__main__":
     backup = Backup()
