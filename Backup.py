@@ -4,7 +4,6 @@ import time
 import logging
 import os
 import json
-# from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO,format="%(asctime)s::%(levelname)s::%(message)s")
 delimeter = "===================================="
@@ -36,7 +35,7 @@ class Backup:
         self.repo_dir = os.path.join(self.current_dir,"backup",self.name_repo)
         self.backup_dir = os.path.join(self.current_dir,"backup")
 
-    def run(self) -> None:
+    def start(self) -> None:
         if not os.path.exists(self.repo_dir):
             os.mkdir(self.backup_dir)
             clone_command = f"cd {self.backup_dir} && git clone  https://{self.token}@github.com/{self.username}/{self.name_repo}"
@@ -58,7 +57,7 @@ class Backup:
 if __name__ == "__main__":
     backup = Backup()
     # Schedule the backup to run every 1 hour
-    schedule.every(1).minute.do(backup.run)
+    schedule.every(1).hour.do(backup.start)
     while True:
         schedule.run_pending()
         time.sleep(1)
