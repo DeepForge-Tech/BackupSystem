@@ -1,5 +1,6 @@
 ## BackupSystem - system for making backup in sql files for postgresql database.
-## For backup:
+### For backup:
+###### backup_settings.json
 ```json
 {
     "GITHUB_TOKEN":"",
@@ -17,7 +18,8 @@
 }
 ```
 
-## For restore:
+### For restore:
+###### restore_settings.json
 ```json
 {
     "databases": {
