@@ -34,18 +34,18 @@ class Backup:
                 raise RuntimeError("One or more setting values ​​not found")
         self.repo_dir = os.path.join(self.current_dir,"backup",self.name_repo)
         self.backup_dir = os.path.join(self.current_dir,"backup")
-        print(self.databases)
 
     def run(self) -> None:
         if not os.path.exists(self.repo_dir):
             os.mkdir(self.backup_dir)
             clone_command = f"cd {self.backup_dir} && git clone  https://{self.token}@github.com/{self.username}/{self.name_repo}"
             subprocess.run(clone_command, shell=True)
-        push_command = f"cd {self.repo_dir} && git checkout -b master && git commit -am \"Backup\" && git push -f origin master"
+        checkout_command = "git checkout -b master "
+        push_command = f"cd {self.repo_dir} && git commit -am \"Backup\" && git push -f origin master"
         subprocess.run(push_command, shell=True)
-        
+
         for database in self.databases:
-            logging.info("Starting backup...")
+            logging.info(f"Starting backup {database}...")
             values = self.databases[database].copy()
             backup_path = os.path.join(self.repo_dir,values["DB_NAME"] + ".sql")
             command = f'pg_dump --dbname=postgresql://{values["DB_USER"]}:{values["DB_PASSWORD"]}@{values["DB_HOST"]}:{values["DB_PORT"]}/{values["DB_NAME"]} > "{backup_path}"'
