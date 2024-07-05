@@ -55,6 +55,7 @@ class Backup:
         print(delimeter)
 
 if __name__ == "__main__":
+    logging.info("App started")
     backup = Backup()
     # Schedule the backup to run every 1 hour
     schedule.every(1).hour.do(backup.start)
