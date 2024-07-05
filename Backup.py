@@ -37,6 +37,12 @@ class Backup:
         print(self.databases)
 
     def run(self) -> None:
+        if not os.path.exists(self.repo_dir):
+            os.mkdir(self.backup_dir)
+            clone_command = f"cd {self.backup_dir} && git clone  https://{self.token}@github.com/{self.username}/{self.name_repo}"
+            subprocess.run(clone_command, shell=True)
+        push_command = f"cd {self.repo_dir} && git checkout -b master && git commit -am \"Backup\" && git push -f origin master"
+        subprocess.run(push_command, shell=True)
         
         for database in self.databases:
             logging.info("Starting backup...")
@@ -45,13 +51,6 @@ class Backup:
             command = f'pg_dump --dbname=postgresql://{values["DB_USER"]}:{values["DB_PASSWORD"]}@{values["DB_HOST"]}:{values["DB_PORT"]}/{values["DB_NAME"]} > "{backup_path}"'
             output = subprocess.run(command, shell=True)
             logging.info(f"Backup successfully finished. {output}")
-
-        if not os.path.exists(self.repo_dir):
-            os.mkdir(self.backup_dir)
-            clone_command = f"cd {self.backup_dir} && git clone  https://{self.token}@github.com/{self.username}/{self.name_repo}"
-            subprocess.run(clone_command, shell=True)
-        push_command = f"cd {self.repo_dir} && git checkout -b master && git commit -am \"Backup\" && git push -f origin master"
-        subprocess.run(push_command, shell=True)
 
 if __name__ == "__main__":
     backup = Backup()
