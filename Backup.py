@@ -56,7 +56,7 @@ class Backup:
 if __name__ == "__main__":
     backup = Backup()
     # Schedule the backup to run every 1 hour
-    schedule.every(1).hour.do(backup.run)
+    schedule.every(1).minute.do(backup.run)
     while True:
         schedule.run_pending()
         time.sleep(1)
